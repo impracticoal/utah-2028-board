@@ -1,0 +1,617 @@
+<title>Utah Mega Board 2028</title>
+<style>
+  :root {
+    --bg: #faf7f3;
+    --bg-raised: #ffffff;
+    --ink: #211d1a;
+    --muted: #746e68;
+    --line: rgba(33,29,26,0.12);
+    --line-strong: rgba(33,29,26,0.22);
+    --accent: #a6192e;
+    --accent-ink: #ffffff;
+    --new: #9a6b1f;
+    --new-bg: rgba(154,107,31,0.12);
+    --star: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161b;
+      --bg-raised: #1b1e24;
+      --ink: #eae6df;
+      --muted: #9b958d;
+      --line: rgba(234,230,223,0.12);
+      --line-strong: rgba(234,230,223,0.22);
+      --accent: #d4425a;
+      --accent-ink: #14161b;
+      --new: #e0ac52;
+      --new-bg: rgba(224,172,82,0.14);
+      --star: #e0ac52;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14161b;
+    --bg-raised: #1b1e24;
+    --ink: #eae6df;
+    --muted: #9b958d;
+    --line: rgba(234,230,223,0.12);
+    --line-strong: rgba(234,230,223,0.22);
+    --accent: #d4425a;
+    --accent-ink: #14161b;
+    --new: #e0ac52;
+    --new-bg: rgba(224,172,82,0.14);
+    --star: #e0ac52;
+  }
+  :root[data-theme="light"] {
+    --bg: #faf7f3;
+    --bg-raised: #ffffff;
+    --ink: #211d1a;
+    --muted: #746e68;
+    --line: rgba(33,29,26,0.12);
+    --line-strong: rgba(33,29,26,0.22);
+    --accent: #a6192e;
+    --accent-ink: #ffffff;
+    --new: #9a6b1f;
+    --new-bg: rgba(154,107,31,0.12);
+    --star: #c99a2e;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  header.page {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 28px;
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 20px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-family: ui-sans-serif, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 800;
+    font-stretch: condensed;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    font-size: clamp(28px, 5vw, 40px);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .subhead {
+    color: var(--muted);
+    font-size: 14.5px;
+    max-width: 62ch;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 28px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stat b {
+    font-size: 22px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+  }
+  .stat span {
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg);
+    padding: 14px 0 12px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 4px;
+  }
+  .filter-btn {
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 7px 13px;
+    border-radius: 20px;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-raised);
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .filter-btn:hover { color: var(--ink); }
+  .filter-btn[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .filter-btn:focus-visible, .search:focus-visible, input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .search {
+    margin-left: auto;
+    font: inherit;
+    font-size: 13.5px;
+    padding: 7px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-raised);
+    color: var(--ink);
+    min-width: 190px;
+  }
+  .search::placeholder { color: var(--muted); }
+
+  .count-line {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 10px 2px 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .table-scroll { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 640px;
+  }
+  thead th {
+    background: var(--bg);
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line-strong);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  thead th.active { color: var(--accent); }
+  thead th .arrow { font-size: 10px; opacity: 0.7; }
+  tbody tr { border-bottom: 1px solid var(--line); }
+  tbody tr.is-new { background: var(--new-bg); }
+  tbody tr.prospect-row { cursor: pointer; }
+  tbody tr.prospect-row:hover { background: var(--line); }
+  tbody tr.prospect-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  tbody tr.prospect-row.is-open { background: var(--line); }
+  tbody tr.prospect-row.is-open td.name { color: var(--accent); }
+  tbody tr.detail-row { border-bottom: 1px solid var(--line-strong); }
+  tbody tr.detail-row td { padding: 4px 10px 18px; }
+  .leaders-eyebrow {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .leaders-list { display: flex; flex-direction: column; gap: 7px; max-width: 420px; }
+  .leader-row { display: grid; grid-template-columns: 120px 1fr 42px; align-items: center; gap: 10px; }
+  .leader-team { font-size: 13px; font-weight: 600; }
+  .leader-bar-track {
+    height: 7px;
+    border-radius: 4px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .leader-bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+  .leader-pct { font-variant-numeric: tabular-nums; font-size: 12.5px; color: var(--muted); text-align: right; }
+  .leader-committed {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--star);
+  }
+  .leaders-empty { font-size: 13px; color: var(--muted); font-style: italic; }
+  td {
+    padding: 9px 10px;
+    vertical-align: top;
+  }
+  td.name { font-weight: 700; }
+  td.name small {
+    display: block;
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  td.pos { color: var(--muted); white-space: nowrap; }
+  td.hometown { color: var(--muted); font-size: 13.5px; }
+  td.rating { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.rating .stars { color: var(--star); letter-spacing: -1px; font-size: 11px; margin-right: 4px; }
+  td.rating .num { font-weight: 700; }
+  td.rating .nr { color: var(--muted); font-style: italic; }
+  td.badge-cell { white-space: nowrap; }
+  .badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--line-strong);
+    color: var(--muted);
+  }
+  .badge.new {
+    color: var(--new);
+    border-color: var(--new);
+    background: var(--new-bg);
+  }
+  .badge.both { color: var(--accent); border-color: var(--accent); }
+
+  .flags {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .flags h2 {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .flags ul { margin: 0; padding-left: 18px; }
+  .flags li { margin-bottom: 6px; font-size: 13.5px; color: var(--muted); }
+  .flags b { color: var(--ink); }
+
+  .empty {
+    padding: 30px 10px;
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+  }
+</style>
+
+<div class="wrap">
+  <header class="page">
+    <div class="eyebrow">247Sports + On3 — Combined</div>
+    <h1>Utah Mega Board 2028</h1>
+    <div class="subhead">Every name from your 247 board (Top Target, High Choice, Interested, Scout Look) merged with On3's Utah offer/industry list. Duplicates collapsed to one row; anything On3 had that wasn't on the 247 board is flagged <span class="badge new" style="vertical-align:1px;">New</span>.</div>
+    <div class="stat-row">
+      <div class="stat"><b id="statTotal">0</b><span>Total prospects</span></div>
+      <div class="stat"><b id="statNew">0</b><span>New from On3</span></div>
+      <div class="stat"><b id="statBoth">0</b><span>On both boards</span></div>
+      <div class="stat"><b id="stat247">0</b><span>247 only</span></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
+    <button class="filter-btn" data-filter="new">New from On3</button>
+    <button class="filter-btn" data-filter="both">On both</button>
+    <button class="filter-btn" data-filter="247">247 only</button>
+    <input class="search" type="text" id="search" placeholder="Search name, school, position…" aria-label="Search prospects">
+  </div>
+  <div class="count-line" id="countLine"></div>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="name">Name</th>
+          <th data-sort="pos">Pos</th>
+          <th data-sort="hometown">Hometown</th>
+          <th data-sort="rating" class="active">Rating <span class="arrow">▾</span></th>
+          <th data-sort="source">Source</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="empty" id="emptyMsg" style="display:none;">No prospects match that search.</div>
+  </div>
+
+  <div class="flags">
+    <h2>Discrepancies worth a second look</h2>
+    <ul>
+      <li><b>Deshawn Simmons</b> — 247 lists LB, 6-3/215, Fort Walton Beach, FL. On3 lists LB, 6-2/200, Harlan (San Antonio, TX). Different hometown, height and weight — possibly two different players sharing a name, not one duplicate. Kept as separate rows below.</li>
+      <li><b>Carter Hanson</b> — 247 has him at Liberty (Bakersfield, CA); On3 has Garces Memorial, same city. Treated as one player, school unconfirmed.</li>
+      <li><b>Zion Key</b> — 247 has Charter Oak (Covina, CA); On3 has Walnut (Walnut, CA). Treated as one player, school unconfirmed.</li>
+      <li><b>Jamar Howard / JJ Howard</b> — same school (Clovis West), same position, likely one player going by a nickname on one site. Merged into one row as "Jamar (JJ) Howard".</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  // Top-tier (247 board)
+  {name:"Mataio Fano", pos:"OT", hometown:"Orem, UT", rating:91, star:4, source:"247", note:"Top Target", leaders:[{team:"Michigan",pct:97},{team:"Miami",pct:1}]},
+  {name:"Grayden Reid", pos:"S", hometown:"Louisville, KY", rating:91, star:4, source:"247", note:"High Choice", leaders:[]},
+  {name:"Kylen Pope", pos:"EDGE", hometown:"Cartersville, GA", rating:84.33, star:3, source:"both", note:"Interested (247) · On3 has EDGE not LB", leaders:[{team:"South Carolina",pct:50},{team:"Georgia Tech",pct:16}]},  // Matched on both boards
+  {name:"Maui Tonata", pos:"OT", hometown:"Orem, UT", rating:95.11, star:4, source:"both", leaders:[{team:"Nebraska",pct:20},{team:"Miami",pct:18}]},
+  {name:"James Foster III", pos:"S", hometown:"Lancaster, TX", rating:93.87, star:4, source:"both", note:"247 had him at WR", leaders:[{team:"SMU",pct:43},{team:"Texas",pct:14}]},
+  {name:"Major Stokes", pos:"EDGE", hometown:"Orem, UT", rating:92.56, star:4, source:"both", leaders:[{team:"Michigan",pct:97},{team:"Miami",pct:1}]},
+  {name:"Tytan McNeal", pos:"TE", hometown:"Sammamish, WA", rating:92.66, star:4, source:"both", leaders:[{team:"Texas",pct:30},{team:"Nebraska",pct:14}]},
+  {name:"Kamieon Compton-Nero", pos:"ATH", hometown:"Owasso, OK", rating:92.79, star:4, source:"both", leaders:[{team:"Oklahoma",pct:83},{team:"Ole Miss",pct:4}]},
+  {name:"Jevyn Severson", pos:"TE", hometown:"Madrid, IA", rating:92.28, star:4, source:"both", leaders:[{team:"Iowa State",pct:35},{team:"Iowa",pct:20}]},
+  {name:"Jayce Halasz", pos:"ATH", hometown:"Graham, WA", rating:91.19, star:4, source:"both", leaders:[{team:"Washington",pct:32},{team:"Oregon",pct:15}]},
+  {name:"Dennis Tua'one", pos:"WR", hometown:"Provo, UT", rating:92.15, star:4, source:"both", note:"247 had him at ATH", leaders:[{team:"Miami",pct:96},{team:"USC",pct:1}]},
+  {name:"Presley DeLance", pos:"TE", hometown:"Lake Oswego, OR", rating:89.71, star:4, source:"both", leaders:[{team:"Florida",pct:51},{team:"Oregon",pct:7}]},
+  {name:"Peyton Smith", pos:"WR", hometown:"La Porte, TX", rating:92.05, star:4, source:"both", leaders:[{team:"Oklahoma State",pct:39},{team:"Houston",pct:6}]},
+  {name:"Jalen Flowers", pos:"S", hometown:"Palos Verdes Peninsula, CA", rating:91.98, star:4, source:"both", leaders:[{team:"USC",pct:47},{team:"Ohio State",pct:15}]},
+  {name:"Samiu Taukiuvea", pos:"OT", hometown:"Salt Lake City, UT", rating:91.40, star:4, source:"both", note:"247 had him at EDGE", leaders:[{team:"SMU",pct:27},{team:"Penn State",pct:24}]},
+  {name:"Toa Feinga", pos:"OT", hometown:"Herriman, UT", rating:91.23, star:4, source:"both", leaders:[{team:"Nebraska",pct:31},{team:"Rutgers",pct:5}]},
+  {name:"Jai'Storm Knight", pos:"OT", hometown:"San Antonio, TX", rating:90.82, star:4, source:"both", leaders:[{team:"Texas",pct:96},{team:"Texas A&M",pct:1}]},
+  {name:"Malosi Ilaoa", pos:"S", hometown:"Provo, UT", rating:90.72, star:4, source:"both", note:"247 had him at ATH", leaders:[{team:"BYU",pct:36},{team:"Arizona",pct:31}]},
+  {name:"Kalen Simmons", pos:"S", hometown:"Iowa Colony / Rosharon, TX", rating:90.11, star:4, source:"both", leaders:[{team:"Houston",pct:9},{team:"Houston",pct:8}]},
+  {name:"Savion James", pos:"S", hometown:"Humble / Houston, TX", rating:89.96, star:4, source:"both", leaders:[{team:"Houston",pct:16},{team:"Baylor",pct:14}]},
+  {name:"Hunter Fujikawa", pos:"QB", hometown:"Mililani, HI", rating:89.94, star:4, source:"both", leaders:[{team:"Stanford",pct:17},{team:"Nebraska",pct:15}]},
+  {name:"Logan Lokey", pos:"DL", hometown:"Denton, TX", rating:89.74, star:4, source:"both", leaders:[{team:"Oklahoma",pct:94},{team:"TCU",pct:2}]},
+  {name:"Vincent Shields", pos:"OT", hometown:"Murrieta / Menifee, CA", rating:89.58, star:4, source:"both", leaders:[{team:"SMU",pct:37},{team:"UCLA",pct:5}]},
+  {name:"Carter Hanson", pos:"RB", hometown:"Bakersfield, CA", rating:89.36, star:4, source:"both", leaders:[{team:"UCLA",pct:11},{team:"Cal",pct:10}]},
+  {name:"Carson LaCombe", pos:"WR", hometown:"San Antonio, TX", rating:90.98, star:4, source:"both", leaders:[{team:"Oklahoma",pct:97},{team:"Ohio State",pct:2}]},
+  {name:"Kason Brown", pos:"WR", hometown:"Arlington, TX", rating:86.31, star:3, source:"both", leaders:[{team:"TCU",pct:9},{team:"SMU",pct:7}]},
+  {name:"Hayden Koo", pos:"WR", hometown:"Tustin, CA", rating:87.24, star:4, source:"both", leaders:[{team:"USC",pct:26},{team:"Ohio State",pct:23}]},
+  {name:"Emmanuel Pullins", pos:"WR", hometown:"Sherman Oaks, CA", rating:87.19, star:4, source:"both", leaders:[{team:"Arizona State",pct:16},{team:"Utah",pct:14}]},
+  {name:"Gaige Weddle", pos:"S", hometown:"San Diego, CA", rating:92.82, star:4, source:"both", leaders:[{team:"Ohio State",pct:23},{team:"USC",pct:11}]},
+  {name:"Aedyn Havili", pos:"DL", hometown:"Sammamish, WA", rating:92.66, star:4, source:"both", leaders:[{team:"Ohio State",pct:32},{team:"Washington",pct:15}]},
+  {name:"Connor Arant", pos:"TE", hometown:"Bixby, OK", rating:86.66, star:4, source:"both", leaders:[{team:"Oklahoma",pct:35},{team:"Ohio State",pct:21}]},
+  {name:"Quincey Clay", pos:"WR", hometown:"Boise, ID", rating:85.78, star:3, source:"both", leaders:[{team:"Utah",pct:21},{team:"Washington",pct:18}]},
+  {name:"Eli Mortensen", pos:"WR", hometown:"Lehi, UT", rating:86.00, star:3, source:"both", leaders:[{team:"BYU",pct:22},{team:"Utah",pct:19}]},
+  {name:"Tommy Devany", pos:"QB", hometown:"Clovis, CA", rating:86.87, star:4, source:"both", leaders:[{team:"Cal",pct:26},{team:"Utah",pct:23}]},
+  {name:"Kaicen Carter", pos:"LB", hometown:"Federal Way, WA", rating:85.33, star:3, source:"both", note:"247 had him at ATH", leaders:[{team:"Washington",pct:15},{team:"Cal",pct:13}]},
+  {name:"Andrew Whittemore", pos:"QB", hometown:"Gainesville, FL", rating:85.00, star:3, source:"both", leaders:[{team:"South Florida",pct:48},{team:"Florida",pct:16}]},
+  {name:"Noah Seufale", pos:"IOL", hometown:"Orem, UT", rating:85.00, star:3, source:"both", leaders:[{team:"Stanford",pct:36},{team:"BYU",pct:5}]},
+  {name:"Steeler Wesley", pos:"TE", hometown:"Lehi, UT", rating:84.67, star:3, source:"both", leaders:[{team:"BYU",pct:12},{team:"Utah",pct:11}]},
+  {name:"Jordan Slye Jr.", pos:"CB", hometown:"Los Angeles, CA", rating:87.00, star:3, source:"247", leaders:[]},
+  {name:"Malaki Davis", pos:"RB", hometown:"Corona, CA", rating:87.00, star:3, source:"247", leaders:[]},
+  {name:"Takeshi Savery", pos:"EDGE", hometown:"Salt Lake City, UT", rating:85.00, star:3, source:"both", leaders:[{team:"Utah",pct:7},{team:"BYU",pct:6}]},
+  {name:"Eazy Crichton", pos:"DL", hometown:"Santa Rosa, CA", rating:89.00, star:4, source:"both", leaders:[{team:"Cal",pct:16},{team:"UCLA",pct:14}]},
+  {name:"Odell Simms", pos:"CB", hometown:"Long Beach, CA", rating:84.33, star:3, source:"both", leaders:[{team:"Cal",pct:16},{team:"Arizona",pct:14}]},
+  {name:"Amarion Taylor", pos:"WR", hometown:"Tulare, CA", rating:84.33, star:3, source:"both", leaders:[{team:"Cal",pct:31},{team:"Utah",pct:27}]},
+  {name:"Carter Morgan", pos:"QB", hometown:"Denton, TX", rating:87.78, star:4, source:"both", leaders:[{team:"Texas Tech",pct:44},{team:"Baylor",pct:6}]},
+  {name:"Aiden-Caleb Rodriguez", pos:"WR", hometown:"Phoenix, AZ", rating:84.67, star:3, source:"both", note:"247 had him at ATH", leaders:[{team:"Utah",pct:21},{team:"Cal",pct:19}]},
+  {name:"Corey Hinton Jr.", pos:"RB", hometown:"Las Vegas, NV", rating:84.33, star:3, source:"both", leaders:[{team:"Wisconsin",pct:51},{team:"Arizona State",pct:7}]},
+  {name:"Koa Malau'ulu", pos:"QB", hometown:"Bellflower, CA", rating:84.67, star:3, source:"both", leaders:[{team:"UCLA",pct:31},{team:"Stanford",pct:27}]},
+  {name:"Cash Taiese", pos:"WR", hometown:"American Fork, UT", rating:null, star:5, source:"both", note:"On3 uncommitted-crystal-ball only, no numeric score", leaders:[{team:"Utah",pct:41},{team:"Utah State",pct:18}]},
+  {name:"James Curoso", pos:"RB", hometown:"Santa Rosa, CA", rating:85.00, star:3, source:"both", leaders:[{team:"Cal",pct:15},{team:"USC",pct:13}]},
+  {name:"Ace Amina", pos:"QB", hometown:"Las Vegas, NV", rating:83.33, star:3, source:"both", leaders:[{team:"Washington",pct:35},{team:"Nebraska",pct:31}]},
+  {name:"Colton Ott", pos:"IOL", hometown:"Boulder, CO", rating:83.33, star:3, source:"both", leaders:[{team:"Colorado",pct:56},{team:"Kansas State",pct:26}]},
+  {name:"Zion Key", pos:"WR / ATH", hometown:"Covina / Walnut, CA", rating:83.00, star:3, source:"both", leaders:[{team:"Utah",pct:47},{team:"San Jose State",pct:21}]},
+  {name:"Koleman Hendrix", pos:"TE", hometown:"Lubbock, TX", rating:81.33, star:3, source:"both", leaders:[{team:"Texas Tech",pct:17},{team:"TCU",pct:15}]},
+  {name:"Jordan Claassen", pos:"WR", hometown:"Herriman, UT", rating:null, star:null, source:"both", leaders:[]},
+  {name:"Will Jones Jr.", pos:"WR", hometown:"Oxnard, CA", rating:null, star:5, source:"both", leaders:[]},
+  {name:"Malakai Leilua", pos:"OT / DL", hometown:"Saratoga Springs, UT", rating:null, star:5, source:"both", leaders:[]},
+  {name:"Ty Westenberger", pos:"OT", hometown:"San Marcos, CA", rating:null, star:5, source:"both", leaders:[{team:"Cal",pct:39},{team:"Utah",pct:34}]},
+  {name:"Mulivai Pula Jr.", pos:"IOL", hometown:"Syracuse, UT", rating:null, star:5, source:"both", leaders:[{team:"Utah",pct:28},{team:"BYU",pct:25}]},
+  {name:"Kinley Victorian", pos:"CB / ATH", hometown:"Irvine, CA", rating:null, star:5, source:"both", leaders:[{team:"Utah",pct:41},{team:"San Diego State",pct:18}]},
+  {name:"Jordyn Murray", pos:"WR", hometown:"Tampa, FL", rating:82.33, star:3, source:"both", leaders:[{team:"Florida",pct:14},{team:"Miami",pct:13}]},
+  {name:"Noah Bozeman", pos:"WR", hometown:"Pasadena, CA", rating:88.00, star:3, source:"both", leaders:[{team:"UCLA",pct:16},{team:"Cal",pct:14}]},
+  {name:"Jamar (JJ) Howard", pos:"QB", hometown:"Fresno / Clovis, CA", rating:85.33, star:3, source:"both", leaders:[{team:"Michigan",pct:31},{team:"Cal",pct:5}]},  // 247-only (Scout Look, no On3 match found in these screenshots)
+  {name:"Kenneth Ward", pos:"ATH", hometown:"Pittsburg, CA", rating:89, star:3, source:"247", leaders:[]},
+  {name:"Jarvious Owens Jr.", pos:"S", hometown:"Houston, TX", rating:89, star:3, source:"247", leaders:[]},
+  {name:"Trey Wright", pos:"QB", hometown:"Frisco, TX", rating:88, star:3, source:"247", leaders:[]},
+  {name:"Jeremiah Tabor", pos:"RB", hometown:"Melissa, TX", rating:88, star:3, source:"247", leaders:[]},
+  {name:"Treyvone Towns Jr.", pos:"QB", hometown:"Rancho Cucamonga, CA", rating:86, star:3, source:"247", leaders:[]},
+  {name:"Leofatu Filipe", pos:"ATH", hometown:"Springfield, OR", rating:86, star:3, source:"247", leaders:[]},
+  {name:"Jayden Durr", pos:"CB", hometown:"North Las Vegas, NV", rating:86, star:3, source:"247", leaders:[]},
+  {name:"Russell Sekona", pos:"QB", hometown:"Santa Ana, CA", rating:85, star:3, source:"247", leaders:[]},
+  {name:"James Granberry", pos:"WR", hometown:"Draper, UT", rating:null, star:null, source:"247", leaders:[]},
+  {name:"Carter Payne", pos:"QB", hometown:"Ogden, UT", rating:null, star:null, source:"247", leaders:[]},
+  {name:"Bridger Young", pos:"LB", hometown:"Kaysville, UT", rating:null, star:null, source:"247", leaders:[]},
+  {name:"Jacob Anene", pos:"WR", hometown:"Coppell, TX", rating:null, star:null, source:"247", leaders:[]},
+  {name:"Ola Murray-Thornton", pos:"LB", hometown:"San Antonio, TX", rating:null, star:null, source:"247", leaders:[]},
+  {name:"Ricky Li'ili'i", pos:"EDGE", hometown:"Honolulu, HI", rating:null, star:null, source:"247", leaders:[{team:"Cal",pct:18},{team:"Oregon",pct:16}]},
+  {name:"Deshawn Simmons (Fort Walton Beach)", pos:"LB", hometown:"Fort Walton Beach, FL", rating:90, star:4, source:"247", note:"Possible name clash — see flags below", leaders:[{team:"Texas",pct:9},{team:"Texas Tech",pct:8}]},
+  {name:"Deshawn Simmons (San Antonio)", pos:"LB", hometown:"San Antonio, TX (Harlan)", rating:90.91, star:4, source:"on3", note:"Possible name clash — see flags below", leaders:[{team:"Texas",pct:9},{team:"Texas Tech",pct:8}]},
+  {name:"Elisha Mueller", pos:"IOL", hometown:"Bellflower, CA", rating:90, star:4, source:"247", leaders:[]},  // On3 additions not seen on the 247 board
+  {name:"Jayden Wade", pos:"QB", hometown:"Los Angeles, CA (IMG Academy)", rating:96.31, star:5, source:"on3", leaders:[{team:"Georgia",pct:null}]},
+  {name:"Austin Attalah", pos:"OT", hometown:"San Bernardino, CA (Orange Lutheran)", rating:93.99, star:4, source:"on3", leaders:[{team:"USC",pct:38},{team:"Texas Tech",pct:13}]},
+  {name:"Trison Satele", pos:"DL", hometown:"Mililani, HI", rating:90.78, star:4, source:"on3", leaders:[{team:"Oregon",pct:99},{team:"Cal",pct:0}]},
+  {name:"Kaden Johnson", pos:"CB", hometown:"Bellevue, WA", rating:87.38, star:4, source:"on3", leaders:[{team:"Kansas State",pct:45},{team:"Utah",pct:7}]},
+  {name:"King Pitts", pos:"DL", hometown:"Kapaa, HI", rating:86.41, star:4, source:"on3", leaders:[{team:"Oregon",pct:7},{team:"UCLA",pct:6}]},
+  {name:"Breck Brady", pos:"TE", hometown:"Bethany, OK (Mustang)", rating:85.67, star:3, source:"on3", leaders:[{team:"Oklahoma State",pct:29},{team:"SMU",pct:14}]},
+  {name:"Micah Hannah", pos:"CB", hometown:"Simi Valley, CA", rating:85.33, star:3, source:"on3", leaders:[{team:"USC",pct:51},{team:"UCLA",pct:4}]},
+  {name:"Jaxson Carper", pos:"QB", hometown:"Ventura, CA (St. Bonaventure)", rating:85.00, star:3, source:"on3", leaders:[{team:"Nebraska",pct:44},{team:"UCLA",pct:6}]},
+  {name:"Jhaheem Brown", pos:"RB", hometown:"Goodyear, AZ (Desert Edge)", rating:85.00, star:3, source:"on3", leaders:[{team:"Arizona",pct:22},{team:"Utah",pct:19}]},
+  {name:"PJ Tautu", pos:"DL", hometown:"Portland, OR (Central Catholic)", rating:84.67, star:3, source:"on3", leaders:[{team:"Washington",pct:15},{team:"Utah",pct:13}]},
+  {name:"Jordan Kirkpatrick", pos:"CB", hometown:"Corona, CA (Centennial)", rating:84.33, star:3, source:"on3", leaders:[{team:"UCLA",pct:9},{team:"Arizona State",pct:8}]},
+  {name:"Byron Brandon Jr.", pos:"RB", hometown:"Goodyear, AZ (Desert Edge)", rating:84.33, star:3, source:"on3", leaders:[{team:"Arizona",pct:14},{team:"Utah",pct:13}]},
+  {name:"Noah Cole", pos:"RB", hometown:"Las Vegas, NV (Bishop Gorman)", rating:null, star:null, source:"on3", leaders:[]},
+  {name:"Easton Conner", pos:"RB", hometown:"Scottsdale, AZ (Desert Mountain)", rating:null, star:null, source:"on3", leaders:[]},
+  {name:"Elijah Christian", pos:"WR", hometown:"Bradenton, FL (Manatee)", rating:null, star:null, source:"on3", leaders:[{team:"Utah",pct:36},{team:"Florida Atlantic",pct:16}]},
+  {name:"Ioane Paselio", pos:"IOL", hometown:"Mililani, HI", rating:null, star:null, source:"on3", leaders:[{team:"Cal",pct:26},{team:"Utah",pct:23}]},
+  {name:"Tupu Aaitui", pos:"—", hometown:"Layton, UT (Layton Christian Academy)", rating:null, star:null, source:"on3", leaders:[]},
+  {name:"John Arthur", pos:"ATH", hometown:"Dickinson, TX", rating:null, star:null, source:"on3", leaders:[]},];
+
+function starString(n) {
+  if (!n) return "";
+  return "★".repeat(n) + "☆".repeat(5 - n);
+}
+
+function badge(source) {
+  if (source === "both") return '<span class="badge both">247 + On3</span>';
+  if (source === "on3") return '<span class="badge new">New · On3</span>';
+  return '<span class="badge">247 only</span>';
+}
+
+let sortKey = "rating";
+let sortDir = -1;
+let activeFilter = "all";
+
+function applyFilter(list) {
+  let out = list;
+  if (activeFilter === "new") out = out.filter(d => d.source === "on3");
+  if (activeFilter === "both") out = out.filter(d => d.source === "both");
+  if (activeFilter === "247") out = out.filter(d => d.source === "247");
+  const q = document.getElementById("search").value.trim().toLowerCase();
+  if (q) {
+    out = out.filter(d =>
+      d.name.toLowerCase().includes(q) ||
+      d.pos.toLowerCase().includes(q) ||
+      d.hometown.toLowerCase().includes(q)
+    );
+  }
+  return out;
+}
+
+function sortList(list) {
+  return [...list].sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (sortKey === "rating") {
+      av = av == null ? -1 : av;
+      bv = bv == null ? -1 : bv;
+      return (av - bv) * sortDir;
+    }
+    av = (av || "").toString().toLowerCase();
+    bv = (bv || "").toString().toLowerCase();
+    if (av < bv) return -1 * sortDir;
+    if (av > bv) return 1 * sortDir;
+    return 0;
+  });
+}
+
+function leadersHtml(d) {
+  if (!d.leaders || !d.leaders.length) {
+    return `<div class="leaders-empty">No recruiting-lean data available for ${d.name}.</div>`;
+  }
+  const maxPct = Math.max(...d.leaders.map(l => (l.pct == null ? 0 : l.pct)), 1);
+  return `<div class="leaders-list">` + d.leaders.map(l => {
+    if (l.pct == null) {
+      return `
+        <div class="leader-row">
+          <span class="leader-team">${l.team}</span>
+          <span class="leader-committed">Committed</span>
+        </div>`;
+    }
+    const width = Math.max((l.pct / maxPct) * 100, 2);
+    return `
+      <div class="leader-row">
+        <span class="leader-team">${l.team}</span>
+        <div class="leader-bar-track"><div class="leader-bar-fill" style="width:${width}%"></div></div>
+        <span class="leader-pct">${l.pct}%</span>
+      </div>`;
+  }).join("") + `</div>`;
+}
+
+let expandedName = null;
+
+function render() {
+  const filtered = sortList(applyFilter(DATA));
+  const rows = document.getElementById("rows");
+  const empty = document.getElementById("emptyMsg");
+  rows.innerHTML = filtered.map(d => {
+    const isOpen = d.name === expandedName;
+    const mainRow = `
+    <tr class="prospect-row ${d.source === 'on3' ? 'is-new' : ''} ${isOpen ? 'is-open' : ''}" data-name="${d.name.replace(/"/g, '&quot;')}" tabindex="0" role="button" aria-expanded="${isOpen}">
+      <td class="name">${d.name}${d.note ? `<small>${d.note}</small>` : ""}</td>
+      <td class="pos">${d.pos}</td>
+      <td class="hometown">${d.hometown}</td>
+      <td class="rating">${
+        d.rating != null
+          ? `<span class="stars">${starString(d.star)}</span><span class="num">${d.rating}</span>`
+          : `<span class="nr">${d.star ? starString(d.star) + " NR" : "NR"}</span>`
+      }</td>
+      <td class="badge-cell">${badge(d.source)}</td>
+    </tr>`;
+    const detailRow = isOpen ? `
+    <tr class="detail-row">
+      <td colspan="5">
+        <div class="leaders-eyebrow">Leading schools</div>
+        ${leadersHtml(d)}
+      </td>
+    </tr>` : "";
+    return mainRow + detailRow;
+  }).join("");
+  empty.style.display = filtered.length ? "none" : "block";
+  document.getElementById("countLine").textContent =
+    `Showing ${filtered.length} of ${DATA.length} — click a name for lean percentages`;
+}
+
+document.getElementById("rows").addEventListener("click", (e) => {
+  const row = e.target.closest(".prospect-row");
+  if (!row) return;
+  const name = row.dataset.name;
+  expandedName = expandedName === name ? null : name;
+  render();
+});
+document.getElementById("rows").addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const row = e.target.closest(".prospect-row");
+  if (!row) return;
+  e.preventDefault();
+  const name = row.dataset.name;
+  expandedName = expandedName === name ? null : name;
+  render();
+});
+
+function updateStats() {
+  document.getElementById("statTotal").textContent = DATA.length;
+  document.getElementById("statNew").textContent = DATA.filter(d => d.source === "on3").length;
+  document.getElementById("statBoth").textContent = DATA.filter(d => d.source === "both").length;
+  document.getElementById("stat247").textContent = DATA.filter(d => d.source === "247").length;
+}
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
+    btn.setAttribute("aria-pressed", "true");
+    activeFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+document.querySelectorAll("thead th[data-sort]").forEach(th => {
+  th.addEventListener("click", () => {
+    const key = th.dataset.sort;
+    if (sortKey === key) {
+      sortDir *= -1;
+    } else {
+      sortKey = key;
+      sortDir = key === "rating" ? -1 : 1;
+    }
+    document.querySelectorAll("thead th").forEach(h => {
+      h.classList.remove("active");
+      h.querySelector(".arrow")?.remove();
+    });
+    th.classList.add("active");
+    const arrow = document.createElement("span");
+    arrow.className = "arrow";
+    arrow.textContent = sortDir === 1 ? "▴" : "▾";
+    th.appendChild(document.createTextNode(" "));
+    th.appendChild(arrow);
+    render();
+  });
+});
+
+document.getElementById("search").addEventListener("input", render);
+
+updateStats();
+render();
+</script>
