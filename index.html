@@ -309,6 +309,7 @@
       <div class="stat"><b id="statNew">0</b><span>New from On3</span></div>
       <div class="stat"><b id="statBoth">0</b><span>On both boards</span></div>
       <div class="stat"><b id="stat247">0</b><span>247 only</span></div>
+      <div class="stat"><b id="statUtah">0</b><span>Utah leading</span></div>
     </div>
   </header>
 
@@ -317,6 +318,7 @@
     <button class="filter-btn" data-filter="new">New from On3</button>
     <button class="filter-btn" data-filter="both">On both</button>
     <button class="filter-btn" data-filter="247">247 only</button>
+    <button class="filter-btn" data-filter="utah">Utah Leading</button>
     <input class="search" type="text" id="search" placeholder="Search name, school, position…" aria-label="Search prospects">
   </div>
   <div class="count-line" id="countLine"></div>
@@ -465,11 +467,16 @@ let sortKey = "rating";
 let sortDir = -1;
 let activeFilter = "all";
 
+function isUtahLeading(d) {
+  return !!(d.leaders && d.leaders.length && d.leaders[0].pct != null && d.leaders[0].team === "Utah");
+}
+
 function applyFilter(list) {
   let out = list;
   if (activeFilter === "new") out = out.filter(d => d.source === "on3");
   if (activeFilter === "both") out = out.filter(d => d.source === "both");
   if (activeFilter === "247") out = out.filter(d => d.source === "247");
+  if (activeFilter === "utah") out = out.filter(isUtahLeading);
   const q = document.getElementById("search").value.trim().toLowerCase();
   if (q) {
     out = out.filter(d =>
@@ -576,6 +583,7 @@ function updateStats() {
   document.getElementById("statNew").textContent = DATA.filter(d => d.source === "on3").length;
   document.getElementById("statBoth").textContent = DATA.filter(d => d.source === "both").length;
   document.getElementById("stat247").textContent = DATA.filter(d => d.source === "247").length;
+  document.getElementById("statUtah").textContent = DATA.filter(isUtahLeading).length;
 }
 
 document.querySelectorAll(".filter-btn").forEach(btn => {
