@@ -239,6 +239,8 @@
     color: var(--star);
   }
   .leaders-empty { font-size: 13px; color: var(--muted); font-style: italic; }
+  .ratings-breakdown .nr { font-size: 13px; color: var(--muted); font-style: italic; }
+  .ratings-breakdown .nr.unknown { color: var(--new); }
   td {
     padding: 9px 10px;
     vertical-align: top;
@@ -539,9 +541,17 @@ function ratingsHtml(d) {
   (d.ratings || []).forEach(r => { byService[r.service] = r; });
   return `<div class="ratings-breakdown">` + services.map(svc => {
     const r = byService[svc];
-    const body = r
-      ? `<span class="stars">${starString(r.star)}</span><span class="num">${r.rating}</span>`
-      : `<span class="nr">Not yet rated</span>`;
+    let body;
+    if (r) {
+      body = `<span class="stars">${starString(r.star)}</span><span class="num">${r.rating}</span>`;
+    } else if (d.source === svc || d.source === "both") {
+      // this prospect's page on this service was actually reviewed, and showed no star rating
+      body = `<span class="nr">Not yet rated (confirmed on ${SERVICE_LABEL[svc]})</span>`;
+    } else {
+      // this prospect was only ever seen on the OTHER service's board — we never checked
+      // this service's page for them, so their real status here is simply unknown
+      body = `<span class="nr unknown">Unknown — not on the ${SERVICE_LABEL[svc]} pages reviewed</span>`;
+    }
     return `<div class="rating-row"><span class="rating-service-name">${SERVICE_LABEL[svc]}</span>${body}</div>`;
   }).join("") + `</div>`;
 }
