@@ -341,6 +341,7 @@
     <button class="filter-btn" data-filter="247">247 only</button>
     <button class="filter-btn" data-filter="utah">Utah Leading</button>
     <button class="filter-btn" data-filter="cb">Crystal Ball</button>
+    <button class="filter-btn" data-filter="elsewhere">Committed Elsewhere</button>
     <input class="search" type="text" id="search" placeholder="Search name, school, position…" aria-label="Search prospects">
   </div>
   <div class="count-line" id="countLine"></div>
@@ -507,6 +508,7 @@ function applyFilter(list) {
   if (activeFilter === "247") out = out.filter(d => d.source === "247");
   if (activeFilter === "utah") out = out.filter(isUtahLeading);
   if (activeFilter === "cb") out = out.filter(d => d.crystalBalls && d.crystalBalls.length);
+  if (activeFilter === "elsewhere") out = out.filter(d => d.commitment && d.commitment.team !== "Utah");
   const q = document.getElementById("search").value.trim().toLowerCase();
   if (q) {
     out = out.filter(d =>
