@@ -327,18 +327,12 @@
     <div class="subhead">Every name from your 247 board (Top Target, High Choice, Interested, Scout Look) merged with On3's Utah offer/industry list. Duplicates collapsed to one row; anything On3 had that wasn't on the 247 board is flagged <span class="badge new" style="vertical-align:1px;">New</span>.</div>
     <div class="stat-row">
       <div class="stat"><b id="statTotal">0</b><span>Total prospects</span></div>
-      <div class="stat"><b id="statNew">0</b><span>New from On3</span></div>
-      <div class="stat"><b id="statBoth">0</b><span>On both boards</span></div>
-      <div class="stat"><b id="stat247">0</b><span>247 only</span></div>
       <div class="stat"><b id="statUtah">0</b><span>Utah leading</span></div>
     </div>
   </header>
 
   <div class="controls">
     <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
-    <button class="filter-btn" data-filter="new">New from On3</button>
-    <button class="filter-btn" data-filter="both">On both</button>
-    <button class="filter-btn" data-filter="247">247 only</button>
     <button class="filter-btn" data-filter="utah">Utah Leading</button>
     <button class="filter-btn" data-filter="cb">Crystal Ball</button>
     <button class="filter-btn" data-filter="elsewhere">Committed Elsewhere</button>
@@ -503,9 +497,6 @@ function isUtahLeading(d) {
 
 function applyFilter(list) {
   let out = list;
-  if (activeFilter === "new") out = out.filter(d => d.source === "on3");
-  if (activeFilter === "both") out = out.filter(d => d.source === "both");
-  if (activeFilter === "247") out = out.filter(d => d.source === "247");
   if (activeFilter === "utah") out = out.filter(isUtahLeading);
   if (activeFilter === "cb") out = out.filter(d => d.crystalBalls && d.crystalBalls.length);
   if (activeFilter === "elsewhere") out = out.filter(d => d.commitment && d.commitment.team !== "Utah");
@@ -669,9 +660,6 @@ document.getElementById("rows").addEventListener("keydown", (e) => {
 
 function updateStats() {
   document.getElementById("statTotal").textContent = DATA.length;
-  document.getElementById("statNew").textContent = DATA.filter(d => d.source === "on3").length;
-  document.getElementById("statBoth").textContent = DATA.filter(d => d.source === "both").length;
-  document.getElementById("stat247").textContent = DATA.filter(d => d.source === "247").length;
   document.getElementById("statUtah").textContent = DATA.filter(isUtahLeading).length;
 }
 
