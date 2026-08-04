@@ -342,6 +342,7 @@
     <button class="filter-btn" data-filter="utah">Utah Leading</button>
     <button class="filter-btn" data-filter="cb">Crystal Ball</button>
     <button class="filter-btn" data-filter="elsewhere">Committed Elsewhere</button>
+    <button class="filter-btn" data-filter="visits">Visits</button>
     <input class="search" type="text" id="search" placeholder="Search name, school, position…" aria-label="Search prospects">
   </div>
   <div class="count-line" id="countLine"></div>
@@ -508,6 +509,7 @@ function applyFilter(list) {
   if (activeFilter === "utah") out = out.filter(isUtahLeading);
   if (activeFilter === "cb") out = out.filter(d => d.crystalBalls && d.crystalBalls.length);
   if (activeFilter === "elsewhere") out = out.filter(d => d.commitment && d.commitment.team !== "Utah");
+  if (activeFilter === "visits") out = out.filter(d => d.visits && d.visits.length);
   const q = document.getElementById("search").value.trim().toLowerCase();
   if (q) {
     out = out.filter(d =>
@@ -591,6 +593,17 @@ function crystalBallsHtml(d) {
       </div>`).join("") + `</div>`;
 }
 
+function visitsHtml(d) {
+  if (!d.visits || !d.visits.length) {
+    return `<div class="leaders-empty">No Utah visits logged. (This only tracks visits to Utah specifically — not other schools.)</div>`;
+  }
+  return `<div class="leaders-list">` + d.visits.map(v => `
+      <div class="cb-row">
+        <span class="leader-team">Utah${v.official ? " (Official)" : " (Unofficial)"}</span>
+        <span class="cb-meta">${v.date}${v.status ? " · " + v.status : ""}</span>
+      </div>`).join("") + `</div>`;
+}
+
 let expandedName = null;
 
 function render() {
@@ -621,6 +634,8 @@ function render() {
         ${leadersHtml(d)}
         <div class="leaders-eyebrow" style="margin-top:14px;">Crystal ball / expert picks</div>
         ${crystalBallsHtml(d)}
+        <div class="leaders-eyebrow" style="margin-top:14px;">Utah visits</div>
+        ${visitsHtml(d)}
       </td>
     </tr>` : "";
     return mainRow + detailRow;
@@ -628,6 +643,8 @@ function render() {
   empty.style.display = filtered.length ? "none" : "block";
   empty.textContent = (!filtered.length && activeFilter === "cb")
     ? "No crystal ball or expert picks logged yet — this fills in once the daily automation starts scraping 247's Crystal Ball and On3's Expert Predictions pages."
+    : (!filtered.length && activeFilter === "visits")
+    ? "No Utah visits logged for any tracked prospect right now."
     : "No prospects match that search.";
   document.getElementById("countLine").textContent =
     `Showing ${filtered.length} of ${DATA.length} — click a name for lean percentages`;
