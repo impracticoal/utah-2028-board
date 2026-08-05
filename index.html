@@ -580,9 +580,7 @@ function crystalBallsHtml(d) {
     return `<div class="leaders-empty">No crystal ball or expert picks logged yet.</div>`;
   }
   return `<div class="leaders-list">` + d.crystalBalls.map(cb => {
-    const meta = cb.analyst
-      ? `${cb.analyst} · ${cb.source === "on3" ? "On3" : "247"}${cb.date ? " · " + cb.date : ""}`
-      : `On3 Industry Prediction${cb.pct != null ? " · " + cb.pct + "%" : ""} (algorithmic lean, not a named analyst pick)`;
+    const meta = `${cb.analyst} · ${cb.source === "on3" ? "On3" : "247"}${cb.date ? " · " + cb.date : ""}`;
     return `
       <div class="cb-row">
         <span class="leader-team">${cb.team}</span>
@@ -644,7 +642,7 @@ function render() {
   }).join("");
   empty.style.display = filtered.length ? "none" : "block";
   empty.textContent = (!filtered.length && activeFilter === "cb")
-    ? "No prospects have a logged pick or lean right now."
+    ? "No prospects have a named-analyst crystal ball pick logged right now."
     : (!filtered.length && activeFilter === "visits")
     ? "No Utah visits logged for any tracked prospect right now."
     : "No prospects match that search.";
