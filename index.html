@@ -579,11 +579,16 @@ function crystalBallsHtml(d) {
   if (!d.crystalBalls || !d.crystalBalls.length) {
     return `<div class="leaders-empty">No crystal ball or expert picks logged yet.</div>`;
   }
-  return `<div class="leaders-list">` + d.crystalBalls.map(cb => `
+  return `<div class="leaders-list">` + d.crystalBalls.map(cb => {
+    const meta = cb.analyst
+      ? `${cb.analyst} · ${cb.source === "on3" ? "On3" : "247"}${cb.date ? " · " + cb.date : ""}`
+      : `On3 Industry Prediction${cb.pct != null ? " · " + cb.pct + "%" : ""} (algorithmic lean, not a named analyst pick)`;
+    return `
       <div class="cb-row">
         <span class="leader-team">${cb.team}</span>
-        <span class="cb-meta">${cb.analyst ? cb.analyst + " · " : ""}${cb.source === "on3" ? "On3" : "247"}${cb.date ? " · " + cb.date : ""}</span>
-      </div>`).join("") + `</div>`;
+        <span class="cb-meta">${meta}</span>
+      </div>`;
+  }).join("") + `</div>`;
 }
 
 function visitsHtml(d) {
@@ -639,7 +644,7 @@ function render() {
   }).join("");
   empty.style.display = filtered.length ? "none" : "block";
   empty.textContent = (!filtered.length && activeFilter === "cb")
-    ? "No crystal ball or expert picks logged yet — this fills in once the daily automation starts scraping 247's Crystal Ball and On3's Expert Predictions pages."
+    ? "No prospects have a logged pick or lean right now."
     : (!filtered.length && activeFilter === "visits")
     ? "No Utah visits logged for any tracked prospect right now."
     : "No prospects match that search.";
