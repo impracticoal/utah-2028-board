@@ -337,6 +337,7 @@
     <button class="filter-btn" data-filter="cb">Crystal Ball</button>
     <button class="filter-btn" data-filter="elsewhere">Committed Elsewhere</button>
     <button class="filter-btn" data-filter="visits">Visits</button>
+    <button class="filter-btn" data-filter="utahTop5">Utah Top 5</button>
     <input class="search" type="text" id="search" placeholder="Search name, school, position…" aria-label="Search prospects">
   </div>
   <div class="count-line" id="countLine"></div>
@@ -501,6 +502,7 @@ function applyFilter(list) {
   if (activeFilter === "cb") out = out.filter(d => d.crystalBalls && d.crystalBalls.length);
   if (activeFilter === "elsewhere") out = out.filter(d => d.commitment && d.commitment.team !== "Utah");
   if (activeFilter === "visits") out = out.filter(d => d.visits && d.visits.length);
+  if (activeFilter === "utahTop5") out = out.filter(d => d.utahRank);
   const q = document.getElementById("search").value.trim().toLowerCase();
   if (q) {
     out = out.filter(d =>
@@ -606,7 +608,10 @@ function render() {
     const best = bestRating(d);
     const mainRow = `
     <tr class="prospect-row ${d.source === 'on3' ? 'is-new' : ''} ${isOpen ? 'is-open' : ''}" data-name="${d.name.replace(/"/g, '&quot;')}" tabindex="0" role="button" aria-expanded="${isOpen}">
-      <td class="name">${d.name}${d.note ? `<small>${d.note}</small>` : ""}</td>
+      <td class="name">${d.name}${
+        [d.utahRank ? `Utah #${d.utahRank.rank} · ${d.utahRank.pct}%` : null, d.note]
+          .filter(Boolean).map(t => `<small>${t}</small>`).join("")
+      }</td>
       <td class="pos">${d.pos}</td>
       <td class="hometown">${d.hometown}</td>
       <td class="rating">${
@@ -623,6 +628,7 @@ function render() {
         ${ratingsHtml(d)}
         <div class="leaders-eyebrow" style="margin-top:14px;">Leading schools</div>
         ${leadersHtml(d)}
+        ${d.utahRank ? `<div class="leaders-empty" style="font-style:normal;margin-top:6px;">Utah is #${d.utahRank.rank} at ${d.utahRank.pct}% (not leading, but in range)</div>` : ""}
         <div class="leaders-eyebrow" style="margin-top:14px;">Crystal ball / expert picks</div>
         ${crystalBallsHtml(d)}
         <div class="leaders-eyebrow" style="margin-top:14px;">Utah visits</div>
